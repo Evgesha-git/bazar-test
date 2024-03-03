@@ -23,7 +23,8 @@ module.exports = {
         'import/no-extraneous-dependencies': 'off',
         'no-console': 'error',
         'react/prop-types': 'off',
-        "spaced-comment": ["error", "always", { "exceptions": ["*", "@ts-check"] }]
+        "spaced-comment": ["error", "always", { "exceptions": ["*", "@ts-check"] }],
+        'react/jsx-filename-extension': [2, {'extensions': ['.js', '.jsx', '.ts', '.tsx']}]
       }
     },
     {

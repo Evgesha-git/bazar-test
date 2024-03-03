@@ -1,0 +1,32 @@
+.container {
+  height: 100vh;
+  padding: 40px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.titleTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.midle {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.description{
+    margin-top: 40px;
+}

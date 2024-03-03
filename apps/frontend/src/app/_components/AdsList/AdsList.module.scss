@@ -1,0 +1,19 @@
+.titleBlock {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.title{
+    text-align: center;
+    font-size: 26px;
+    font-weight: 900;
+}
+
+.items{
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}

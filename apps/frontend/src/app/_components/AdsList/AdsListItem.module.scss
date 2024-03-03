@@ -1,0 +1,22 @@
+.item{
+    width: 250px;
+    padding: 10px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    box-shadow: 0 0 3px 0px #00000075;
+}
+
+.line{
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
