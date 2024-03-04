@@ -1,4 +1,5 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   TextField,
   Button,
@@ -9,28 +10,27 @@ import {
 } from '@mui/material';
 import s from './Filter.module.scss';
 
-type TPRops = {
-  fetching: (params: string) => void
-}
-
-const Filter: FC<TPRops> = (props) => {
-  const { fetching } = props;
+const Filter: FC = () => {
   const [open, setOpen] = useState(false);
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
-  const [desc, setDesc] = useState('');
-  const [city, setCity] = useState('');
-  const [district, setDistrict] = useState('');
+  const [minPrice, setMinPrice] = useState<string | null>('');
+  const [maxPrice, setMaxPrice] = useState<string | null>('');
+  const [desc, setDesc] = useState<string | null>('');
+  const [city, setCity] = useState<string | null>('');
+  const [district, setDistrict] = useState<string | null>('');
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const closeHandler = () => setOpen(false);
 
   const sendFilter = (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
     if (!minPrice && !maxPrice && !desc && !city && !district) {
-      fetching('');
       setOpen(false);
+      router.push(`${pathname}`);
       return;
     }
+    const regParams = /&$/gi;
     const minPriceParam = minPrice ? `minPrice=${minPrice}` : '';
     const maxPriceParam = maxPrice ? `maxPrice=${maxPrice}` : '';
     const searchParam = desc ? `search=${desc}` : '';
@@ -39,9 +39,28 @@ const Filter: FC<TPRops> = (props) => {
     const params = `${minPriceParam}${minPriceParam ? '&' : ''
       }${maxPriceParam}${maxPriceParam ? '&' : ''}${searchParam}${searchParam ? '&' : ''
       }${cityParam}${cityParam ? '&' : ''}${districtParam}`;
-    fetching(params);
     setOpen(false);
+    router.push(`${pathname}?${params.replace(regParams, '')}`);
   };
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (params.get('minPrice')){
+      setMinPrice(params.get('minPrice'));
+    }
+    if (params.get('maxPrice')){
+      setMaxPrice(params.get('maxPrice'));
+    }
+    if (params.get('search')){
+      setDesc(params.get('search'));
+    }
+    if (params.get('city')){
+      setCity(params.get('city'));
+    }
+    if (params.get('district')){
+      setDistrict(params.get('district'));
+    }
+  }, [searchParams]);
 
   return (
     <>

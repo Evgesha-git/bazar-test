@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useState, FC } from 'react';
+import React, { useEffect, useState, FC } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Box } from '@mui/material';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
@@ -11,28 +12,13 @@ import s from './AdsList.module.scss';
 
 const AdsList: FC = () => {
   const [ads, setAds] = useState<TAds | null>(null);
-
-  const fetchFilter = useCallback((params: string) => {
-    const fetchData = async () => {
-      try {
-        const resp = await toast.promise(httpClient.get(`/api/ads?${params}`), {
-          pending: 'Fetching data',
-        });
-        setAds(resp.data);
-      } catch (e) {
-        if (axios.isAxiosError(e))
-          toast.error(e.message, {
-            position: 'top-center',
-          });
-      }
-    };
-    fetchData();
-  }, []);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const fetchingData = async () => {
       try {
-        const resp = await toast.promise(httpClient.get('/api/ads'), {
+        const link = searchParams.toString() ? `/api/ads?${searchParams.toString()}` : `/api/ads`;
+        const resp = await toast.promise(httpClient.get(link), {
           pending: 'Fetching data',
         });
         setAds(resp.data);
@@ -41,18 +27,21 @@ const AdsList: FC = () => {
           toast.error(e.message, {
             position: 'top-center',
           });
+        fetchingData();
       }
     };
     fetchingData();
-  }, []);
+  }, [searchParams]);
+
   return (
     <div className={s.add__list}>
       <Box sx={{ pt: 2.5 }}>
         <div className={s.titleBlock}>
           <h1 className={s.title}>List of ads</h1>
-          <Filter fetching={fetchFilter} />
+          <Filter />
         </div>
         <div className={s.items}>
+          {!ads && <h2>Ads not found</h2>}
           {ads &&
             ads.results.map((item) => (
               <AdsListItem key={item.id.toString()} item={item} />
